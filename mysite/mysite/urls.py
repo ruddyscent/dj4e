@@ -16,7 +16,6 @@ Including another URLconf
 import os
 from django.contrib import admin
 from django.urls import path, include, re_path
-# from django.conf.urls import url
 from django.views.static import serve
 from django.views.generic import TemplateView
 
@@ -27,6 +26,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home/main.html')),
     path('polls/', include('polls.urls')),
     path('hello/', include('hello.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('autos/', include('autos.urls')),
     path('admin/', admin.site.urls),
     re_path(r'^site/(?P<path>.*)$', serve,
     {'document_root': SITE_ROOT, 'show_indexes': True},
