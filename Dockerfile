@@ -2,7 +2,7 @@ FROM arm64v8/ubuntu:22.04
 
 RUN apt-get update \
  && export DEBIAN_FRONTEND=noninteractive \
- && apt-get -y install --no-install-recommends python-is-python3 python3-pip \
+ && apt-get -y install --no-install-recommends python-is-python3 python3-pip tzdata \
  && apt-get clean autoclean \
  && apt-get autoremove --yes \
  && rm -rf /var/lib{apt,dpkg,cache,log}/
