@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  django:
+    build: .
+    shm_size: "2gb"
+    volumes:
+      - ./mysite:/mysite
+    ports:
+      - "8000:8000"
+    working_dir: /mysite
+    tty: true
+    stdin_open: true
