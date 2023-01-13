@@ -18,7 +18,7 @@ class CreateForm(forms.ModelForm):
     # Hint: this will need to be changed for use in the ads application :)
     class Meta:
         model = Ad
-        fields = ['title', 'text', 'picture']  # Picture is manual
+        fields = ['title', 'price', 'text', 'picture']  # Picture is manual
 
     # Validate the size of the picture
     def clean(self):
@@ -49,3 +49,9 @@ class CreateForm(forms.ModelForm):
 # https://stackoverflow.com/questions/2472422/django-file-upload-size-limit
 # https://stackoverflow.com/questions/32007311/how-to-change-data-in-django-modelform
 # https://docs.djangoproject.com/en/3.0/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
+
+
+# strip means to remove whitespace from the beginning and the end before storing the column
+class CommentForm(forms.Form):
+    comment = forms.CharField(required=True, max_length=500, min_length=3, strip=True)
+    
