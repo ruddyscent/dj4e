@@ -10,3 +10,5 @@ services:
     working_dir: /mysite
     tty: true
     stdin_open: true
+    env_file:
+      - .env
