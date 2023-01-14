@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'social_django',
+    # 'social_django_mongoengine',
     'taggit',
     'home.apps.HomeConfig',
 ]
@@ -154,6 +155,7 @@ try:
     from . import github_settings
     SOCIAL_AUTH_GITHUB_KEY = github_settings.SOCIAL_AUTH_GITHUB_KEY
     SOCIAL_AUTH_GITHUB_SECRET = github_settings.SOCIAL_AUTH_GITHUB_SECRET
+    # SOCIAL_AUTH_STORAGE = 'social_django_mongoengine.models.DjangoStorage'
 except:
     print('When you want to use social login, please see mysite/github_settings-dist.py')
 
