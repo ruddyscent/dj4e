@@ -9,6 +9,7 @@ django-extensions==3.2.1
 django-taggit==3.1.0
 social-auth-app-django==5.0.0
 # social-auth-app-django-mongoengine==1.0.0
+django-taggit==3.1.0
 
 # If you want to use MySQL, and are not running on PythonAnywhere,
 # uncomment the following line you might need to install pre-requisite
