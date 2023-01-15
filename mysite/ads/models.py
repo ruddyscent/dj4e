@@ -2,12 +2,18 @@ from django.db import models
 from django.core.validators import MinLengthValidator
 from django.conf import settings
 
+from taggit.managers import TaggableManager
+
 # Create your models here.
 class Ad(models.Model):
     title = models.CharField(max_length=200, 
                              validators=[MinLengthValidator(2, "Title must be greater than 2 characters")])
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     text = models.TextField()
+
+    # https://django-taggit.readthedocs.io/en/latest/api.html#TaggableManager
+    tags = TaggableManager(blank=True)
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comments = models.ManyToManyField(settings.AUTH_USER_MODEL,
         through='Comment', related_name='comments_owned')

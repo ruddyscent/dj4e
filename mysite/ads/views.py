@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 # csrf exemption in class based views
 # https://stackoverflow.com/questions/16458166/how-to-disable-djangos-csrf-validation
@@ -21,7 +22,15 @@ class AdListView(OwnerListView):
     template_name = "ads/ad_list.html"
 
     def get(self, request):
-        ad_list = Ad.objects.all()
+        strval = request.GET.get("search", False)
+        if strval:
+            query = Q(title__icontains=strval)
+            query.add(Q(text__icontains=strval), Q.OR)
+            query.add(Q(tags__name__in=strval), Q.OR)
+            ad_list = Ad.objects.filter(query).select_related().distinct().order_by('-updated_at')
+        else:
+            ad_list = Ad.objects.all()
+            
         favorites = list()
         if request.user.is_authenticated:
             # rows = [{'id': 2}, {'id': 4} ... ]  (A list of rows)
@@ -45,6 +54,8 @@ class AdDetailView(OwnerDetailView):
 
 
 class AdCreateView(LoginRequiredMixin, View):
+    model = Ad
+    fields = ['title', 'price', 'text', 'tags']
     template_name = 'ads/ad_form.html'
     success_url = reverse_lazy('ads:all')
 
@@ -64,10 +75,14 @@ class AdCreateView(LoginRequiredMixin, View):
         ad = form.save(commit=False)
         ad.owner = self.request.user
         ad.save()
+
+        form.save_m2m()
         return redirect(self.success_url)
         
 
 class AdUpdateView(LoginRequiredMixin, View):
+    model = Ad
+    fields = ['title', 'price', 'text', 'tags']
     template_name = 'ads/ad_form.html'
     success_url = reverse_lazy('ads:all')
 
@@ -85,8 +100,12 @@ class AdUpdateView(LoginRequiredMixin, View):
             ctx = {'form': form}
             return render(request, self.template_name, ctx)
 
-        pic = form.save(commit=False)
-        pic.save()
+        inst = form.save(commit=False)
+        inst.owner = request.user
+        inst.save()
+
+        # https://django-taggit.readthedocs.io/en/latest/forms.html#commit-false
+        form.save_m2m()    # Add this
 
         return redirect(self.success_url)
 
